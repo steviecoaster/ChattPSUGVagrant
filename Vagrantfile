@@ -46,7 +46,7 @@ Vagrant.configure("2") do |config|
   #hostname
   config.vm.hostname = "pschatt"
   # timeout of waiting for image to stop running - may be a deprecated setting
-  config.windows.halt_timeout = 40
+  config.windows.halt_timeout = 60
   # username/password for accessing the image
   config.winrm.username = "vagrant"
   config.winrm.password = "vagrant"
@@ -94,38 +94,7 @@ Vagrant.configure("2") do |config|
 
 
   #second box
-config.vm.define "secondbox" do |secondbox|
-  secondbox.vm.box = "StefanScherer/Windows_2019"
-  secondbox.windows.halt_timeout = 20
-  secondbox.vm.boot_timeout = 600
-  secondbox.winrm.username = "vagrant"
-  secondbox.winrm.password = "vagrant"
-  secondbox.vm.guest = :windows
-  secondbox.vm.communicator = "winrm"
 
-  secondbox.vm.hostname = "secondbox"
-  secondbox.windows.set_work_network = true
-
-  #nat
-  secondbox.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true, host_ip: "127.0.0.1"
-  secondbox.vm.network :forwarded_port, guest: 3389, host: 3389, id: "rdp", auto_correct: true, host_ip: "127.0.0.1"
-  secondbox.vm.network :forwarded_port, guest: 22, host: 22, id: "ssh", auto_correct: true, host_ip: "127.0.0.1"
-  secondbox.vm.network :forwarded_port, guest: 80, host: 80, id: "web", auto_correct: true, host_ip: "127.0.0.1"
-
-  #synced folders
-  #secondbox.vm.synced_folder "../blah", "/blah"
-
-  secondbox.vm.provider :virtualbox do |v, override|
-    override.vm.network :private_network, ip: 10.10.13.15
-    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.linked_clone = true if Vagrant::VERSION >= '1.8.0'
-    v.gui = false
-    v.customize ["modifyvm", :id, "--memory", "3072"]
-    v.customize ["modifyvm", :id, "--audio", "none"]
-    v.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-    v.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
-    v.customize ["modifyvm", :id, "--usb", "off"]
-  end
   
   ##Run scripts here, etc.
 end
