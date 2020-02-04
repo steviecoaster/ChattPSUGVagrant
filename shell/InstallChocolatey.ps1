@@ -10,7 +10,7 @@ $env:ChocolateyInstall = "$($env:SystemDrive)\ProgramData\Chocolatey"
 $env:Path += ";$ChocoInstallPath"
 $DebugPreference = "Continue";
 $env:ChocolateyEnvironmentDebug = 'true'
-
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 function Install-LocalChocolateyPackage {
 param (
   [string]$chocolateyPackageFilePath = ''
